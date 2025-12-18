@@ -37,12 +37,14 @@ const reviews = [
 ]
 
 export default function Reviews() {
-  const doubled = [...reviews, ...reviews] 
+  const doubled = [...reviews, ...reviews]
 
   return (
-    <section id="reviews" className="bg-neutral-950 text-white px-6 py-24">
-      <div className="mx-auto max-w-7xl">
-       
+    <section
+      id="reviews"
+      className="bg-neutral-950 text-white py-24 overflow-hidden"
+    >
+      <div className="mx-auto max-w-7xl px-6">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
           <h2 className="text-4xl md:text-5xl font-extrabold leading-tight">
             Клиенты при работе с нами
@@ -59,19 +61,20 @@ export default function Reviews() {
             решения поставленных задач.
           </p>
         </div>
+      </div>
 
-       
-        <div className="mt-14 overflow-hidden">
-          <div className="reviews-marquee flex w-[200%] gap-6">
-            {doubled.map((r, idx) => (
-              <ReviewCard key={`${r.name}-${idx}`} {...r} />
-            ))}
-          </div>
+     
+      <div className="mt-16 w-screen overflow-hidden">
+        <div className="reviews-marquee flex gap-6 px-6">
+          {doubled.map((r, idx) => (
+            <ReviewCard key={`${r.name}-${idx}`} {...r} />
+          ))}
         </div>
       </div>
     </section>
   )
 }
+
 
 function ReviewCard({ name, rating, text, link }) {
   return (
