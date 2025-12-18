@@ -1,47 +1,50 @@
-import { useState } from 'react'
+import { useEffect, useState } from "react"
 import logo from "../assets/logo.png"
+import logomain from "../assets/logomain.png"
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const handleSmoothScroll = (e, targetId) => {
-    e.preventDefault()
-    const element = document.querySelector(targetId)
-    if (element) {
-      const headerHeight = 100 // Высота фиксированного header
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.pageYOffset - headerHeight
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      })
-    }
-    setIsMenuOpen(false)
-  }
-
-  // Ссылки навигации
   const navLinks = [
-    { id: 'about', label: 'О нас' },
-    { id: 'price', label: 'Стоимость' },
-    { id: 'gallery', label: 'Стрижки' },
+    { id: "home", label: "Главная" },
+    { id: "about", label: "О нас" },
+    { id: "gallery", label: "Наши работы" },
+    { id: "reviews", label: "Отзывы" },
   ]
 
+
+const handleSmoothScroll = (e, id) => {
+  e.preventDefault()
+  document.querySelector(`#${id}`)?.scrollIntoView({
+    behavior: "smooth",
+  })
+  setIsMenuOpen(false)
+}
+
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setIsMenuOpen(false)
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [])
+
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-black/90 backdrop-blur border-b border-orange-500/20">
-      <div className="w-full mx-auto px-8 lg:px-16 py-6 flex items-center justify-between">
-        
+    <header
+      className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur border-b border-orange-500/20"
+    >
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-8 py-5 flex items-center justify-between">
         {/* ЛОГО */}
-        <div className="flex items-center gap-3">
-          <img
-            src={logo}
-            alt="Barbershop logo"
-            className="w-10 h-10"
-          />
-          <span className="text-2xl font-bold text-orange-500">
-            BARBER
-          </span>
-        </div>
+        <a
+  href="#home"
+  onClick={(e) => handleSmoothScroll(e, "home")}
+  className="flex items-center justify-center gap-4"
+>
+  <img src={logo} alt="Barbershop logo" className="w-14 h-14" />
+  <img src={logomain} alt="Barbershop logomain" className="w-28 h-14" />
+</a>
+
 
         {/* ДЕСКТОПНАЯ НАВИГАЦИЯ */}
         <nav className="hidden md:flex items-center gap-8">
@@ -49,86 +52,80 @@ const Header = () => {
             <a
               key={link.id}
               href={`#${link.id}`}
-              onClick={(e) => handleSmoothScroll(e, `#${link.id}`)}
+              onClick={(e) => handleSmoothScroll(e, link.id)}
               className="text-gray-300 hover:text-orange-500 transition-colors duration-200"
             >
               {link.label}
             </a>
           ))}
 
-          {/* КНОПКА ЗАПИСИ */}
-          <a
-            href="#booking"
-            onClick={(e) => handleSmoothScroll(e, '#booking')}
-            className="ml-4 px-6 py-2 rounded-md bg-orange-500 text-black font-semibold hover:bg-orange-600 hover:text-white transition-all duration-200 animate-pulse-subtle"
-          >
-            Записаться
-          </a>
+         <a
+  href="https://dikidi.ru/997256?p=1.pi-po"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center justify-center rounded-full bg-orange-500 px-12 py-4 text-sm font-semibold text-black transition-all duration-300 hover:bg-orange-400 hover:text-white hover:-translate-y-0.5 hover:shadow-xl"
+>
+  Записаться
+</a>
+
+
         </nav>
 
-        {/* БУРГЕР-КНОПКА (МОБИЛЬНАЯ) */}
+        {/* БУРГЕР */}
         <button
-  onClick={() => setIsMenuOpen(!isMenuOpen)}
-  className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-2"
-  aria-label="Меню"
->
-  {/* Верхняя линия */}
-  <span
-    className={`block w-8 h-[3px] bg-orange-500 rounded transition-transform duration-300 ease-in-out
-      ${isMenuOpen ? 'rotate-45 translate-y-2' : 'rotate-0 translate-y-0'}`}
-  />
-  
-  {/* Средняя линия */}
-  <span
-    className={`block w-8 h-[3px] bg-orange-500 rounded transition-opacity duration-300 ease-in-out
-      ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}
-  />
-  
-  {/* Нижняя линия */}
-  <span
-    className={`block w-8 h-[3px] bg-orange-500 rounded transition-transform duration-300 ease-in-out
-      ${isMenuOpen ? '-rotate-45 -translate-y-2' : 'rotate-0 translate-y-0'}`}
-  />
-</button>
-
-
-
+          onClick={() => setIsMenuOpen((v) => !v)}
+          className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center gap-2"
+          aria-label="Меню"
+          aria-expanded={isMenuOpen}
+        >
+          <span
+            className={`block w-8 h-[3px] bg-orange-500 rounded transition-transform duration-300 ease-in-out
+              ${isMenuOpen ? "rotate-45 translate-y-2" : "rotate-0 translate-y-0"}`}
+          />
+          <span
+            className={`block w-8 h-[3px] bg-orange-500 rounded transition-opacity duration-300 ease-in-out
+              ${isMenuOpen ? "opacity-0" : "opacity-100"}`}
+          />
+          <span
+            className={`block w-8 h-[3px] bg-orange-500 rounded transition-transform duration-300 ease-in-out
+              ${isMenuOpen ? "-rotate-45 -translate-y-2" : "rotate-0 translate-y-0"}`}
+          />
+        </button>
       </div>
 
       {/* МОБИЛЬНОЕ МЕНЮ */}
       <div
-        className={`md:hidden fixed left-0 w-full bg-black/95 backdrop-blur border-b border-orange-500/20 overflow-hidden ${
-          isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        className={`md:hidden overflow-hidden border-b border-orange-500/20 bg-black/95 backdrop-blur transition-all duration-300 ${
+          isMenuOpen ? "max-h-[520px] opacity-100" : "max-h-0 opacity-0"
         }`}
-        style={{
-          top: '88px',
-          transform: isMenuOpen ? 'translateY(0)' : 'translateY(-100%)',
-          transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out',
-          maxHeight: isMenuOpen ? '500px' : '0px',
-        }}
       >
-        <nav className="flex flex-col px-6 py-4 gap-4">
+        <nav className="mx-auto w-full max-w-7xl px-6 py-4 flex flex-col gap-4">
           {navLinks.map((link) => (
             <a
               key={link.id}
               href={`#${link.id}`}
-              onClick={(e) => handleSmoothScroll(e, `#${link.id}`)}
+              onClick={(e) => handleSmoothScroll(e, link.id)}
               className="text-gray-300 hover:text-orange-500 transition-colors duration-200 py-2 text-lg"
             >
               {link.label}
             </a>
           ))}
+
           <a
-            href="#booking"
-            onClick={(e) => handleSmoothScroll(e, '#booking')}
-            className="mt-2 px-6 py-3 rounded-md bg-orange-500 text-black font-semibold hover:bg-orange-600 hover:text-white transition-all duration-200 text-center animate-pulse-subtle"
-          >
-            Записаться
-          </a>
+  href="https://dikidi.ru/997256?p=1.pi-po"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center justify-center rounded-full bg-orange-500 px-12 py-4 text-sm font-semibold text-black transition-all duration-300 hover:bg-orange-400 hover:text-white hover:-translate-y-0.5 hover:shadow-xl"
+>
+  Записаться
+</a>
+
+
         </nav>
       </div>
     </header>
   )
 }
+
 
 export default Header
