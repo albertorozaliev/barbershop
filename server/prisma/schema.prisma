@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Client {
+  id             Int      @id @default(autoincrement())
+  company        String
+  contact        String
+  email          String
+  phone          String
+  status         String
+  activeProjects Int      @default(0)
+  createdAt      DateTime @default(now())
+}
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  name      String
+  client    String
+  manager   String
+  percent   Int
+  status    String
+  budget    String
+  createdAt DateTime @default(now())
+}
+
+model Report {
+  id        Int      @id @default(autoincrement())
+  dt        DateTime @db.Timestamp(6)
+  project   String
+  manager   String
+  status    String
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+
+  @@map("reports")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  fullName       String
+  role           String
+  email          String   @unique
+  phone          String
+  status         String
+  activeProjects Int      @default(0)
+  createdAt      DateTime @default(now()) @db.Timestamp(6)
+}
